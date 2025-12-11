@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=64", "setuptools_scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "netflow"
+authors = [{name = "Rena Elkin"}]
+version = "0.0.1"
+description="Toolbox to compute information flow on a network and correlations between network modules"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "LICENSE.txt"}
+dependencies = [
+        'pandas==1.4.1',
+        'networkx',
+        'pot==0.8.2',
+        'numpy==1.21.2',
+        'cvxpy',
+        'python-louvain',
+        'ipykernel',
+        'jupyterlab',
+        'notebook==6.5.2',
+        'jupyter_contrib_nbextensions',
+        'seaborn',
+        'tqdm',
+        'lifelines',
+        'openpyxl',
+        'scikit-learn',
+        'fastcluster',
+        'multiprocess',
+        'graphviz',
+        'pygraphviz',
+        'dtreeviz',
+        'plotly==5.9.0',
+        'colorlog==6.7.0',
+        'rich',
+        'statsmodels',
+        'dash==2.12.0',
+        'dash-html-components==2.0.0',
+        'dash-bootstrap-components==1.4.2',
+        'dash_cytoscape==0.2.0',
+        'pptree',
+        'jupyter-dash==0.4.2',
+        'dash-extensions',
+        'dash-table==5.0.0']
+
+[project.urls]
+"Homepage" = "https://github.com/areElkin/netflow/"
+
+[tool.setuptools_scm]
+write_to = "netflow/_version.py" # Write software version to this file
