@@ -1,0 +1,16 @@
+﻿netflow.methods
+===============
+
+.. automodule:: netflow.methods
+
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   classes
+   metrics
+   network_propagation
+   stats
