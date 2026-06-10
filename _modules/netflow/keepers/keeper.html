@@ -55,7 +55,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.dev" />
-    <meta name="docbuild:last-update" content="May 20, 2026"/>
+    <meta name="docbuild:last-update" content="Jun 10, 2026"/>
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -418,7 +418,7 @@
 <span class="c1">#     POSER, compute_rw_transitions,</span>
 <span class="c1"># import netflow.InfoNet as InfoNet</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.._logging</span><span class="w"> </span><span class="kn">import</span> <span class="n">_gen_logger</span><span class="p">,</span> <span class="n">set_verbose</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..prep.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">PCA_tx</span><span class="p">,</span> <span class="n">log1p_tx</span><span class="p">,</span> <span class="n">rand_offset_tx</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..prep.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">PCA_tx</span><span class="p">,</span> <span class="n">log1p_tx</span><span class="p">,</span> <span class="n">rand_offset_tx</span><span class="p">,</span> <span class="n">feature_correlations</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..probe</span><span class="w"> </span><span class="kn">import</span> <span class="n">summary</span>
 
 <span class="c1"># from importlib import reload</span>
@@ -909,9 +909,16 @@
         <span class="n">data_z</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
         <span class="n">data_z</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data_z</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">data_z</span></div>
+
+
+<div class="viewcode-block" id="DataView.feature_correlations">
+<a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DataView.feature_correlations">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">feature_correlations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span>
+        <span class="n">corr</span> <span class="o">=</span> <span class="n">feature_correlations</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">corr</span></div>
 </div>
 
-        
 
 <div class="viewcode-block" id="DistanceKeeper">
 <a class="viewcode-back" href="../../../reference/generated/netflow.keepers.keeper.html#netflow.keepers.keeper.DistanceKeeper">[docs]</a>
@@ -3325,12 +3332,13 @@
 <span class="sd">        key : `str`</span>
 <span class="sd">            The label used to reference the distance matrix stored in ``keeper.distances``,</span>
 <span class="sd">            of size (n_observations, n_observations).</span>
-<span class="sd">        root : {`None`, `int`, &#39;density&#39;, &#39;density_inv&#39;, &#39;ratio&#39;}</span>
+<span class="sd">        root : {`None`, `int`, `List[int]`, &#39;density&#39;, &#39;density_inv&#39;, &#39;ratio&#39;}</span>
 <span class="sd">            The root. If `None`, &#39;density&#39; is used.</span>
 
 <span class="sd">            Options:</span>
 
 <span class="sd">            - `int` : index of observation</span>
+<span class="sd">            - `List[int]` : list of indices of observations and uses the mean distance to them.</span>
 <span class="sd">            - &#39;density&#39; : select observation with minimal distance-density</span>
 <span class="sd">            - &#39;density_inv&#39; : select observation with maximal distance-density</span>
 <span class="sd">            - &#39;ratio&#39; : select observation which leads to maximal triangular ratio distance</span>
@@ -3419,6 +3427,8 @@
 
         <span class="n">G_poser</span> <span class="o">=</span> <span class="n">poser</span><span class="o">.</span><span class="n">branchings_segments</span><span class="p">(</span><span class="n">n_branches</span><span class="p">,</span> <span class="n">until_branched</span><span class="o">=</span><span class="n">until_branched</span><span class="p">,</span> <span class="n">annotate</span><span class="o">=</span><span class="n">annotate</span><span class="p">)</span>
         <span class="n">G_poser_nn</span> <span class="o">=</span> <span class="n">poser</span><span class="o">.</span><span class="n">construct_pose_nn_topology</span><span class="p">(</span><span class="n">G_poser</span><span class="p">,</span> <span class="n">mutual</span><span class="o">=</span><span class="n">mutual</span><span class="p">,</span> <span class="n">k_mnn</span><span class="o">=</span><span class="n">k_mnn</span><span class="p">,</span> <span class="n">annotate</span><span class="o">=</span><span class="n">annotate</span><span class="p">)</span>
+
+<span class="c1"># line 2065  tips3.append(np.array([np.where(allindices[node.data] == tipx)[0][0] for tipx in tip]).astype(int))</span>
 
         <span class="c1"># label = [key]</span>
         <span class="c1"># if root is not None:</span>

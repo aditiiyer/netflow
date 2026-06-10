@@ -17,7 +17,5 @@ netflow.probe.summary
       get_graph_distances
       get_gsea_library_names
       gsea_group_summary
-      ordered_features_correlation_branch
-      ordered_features_correlation_global
       unique_significant_features_by_group
    

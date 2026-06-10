@@ -55,7 +55,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.dev" />
-    <meta name="docbuild:last-update" content="May 20, 2026"/>
+    <meta name="docbuild:last-update" content="Jun 10, 2026"/>
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -1017,84 +1017,6 @@
                                             <span class="n">index</span><span class="o">=</span><span class="n">feat_labels</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">corr_dict</span></div>
-
-
-
-<div class="viewcode-block" id="ordered_features_correlation_global">
-<a class="viewcode-back" href="../../../reference/generated/netflow.probe.summary.html#netflow.probe.summary.ordered_features_correlation_global">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">ordered_features_correlation_global</span><span class="p">(</span><span class="n">poser</span><span class="p">,</span> <span class="n">graph_nw</span><span class="p">,</span> <span class="n">data_df</span><span class="p">,</span> <span class="n">obs_labels</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Compute correlation between feature pairs, sorted by global node order.</span>
-
-<span class="sd">    Parameters:</span>
-<span class="sd">    ----------</span>
-<span class="sd">        poser: `netflow.pose.POSER`</span>
-<span class="sd">            The object used to construct the POSE.</span>
-<span class="sd">        graph_nw: `networkx.Graph`</span>
-<span class="sd">            The POSE graph.</span>
-<span class="sd">        data_df: `pandas.DataFrame` (n_features, n_observations)</span>
-<span class="sd">            Feature matrix.</span>
-<span class="sd">        obs_labels: `list` of `str`</span>
-<span class="sd">            List of observation labels corresponding to node IDs.</span>
-<span class="sd">        weights: {`None`, `pandas.DataFrame`, (n, n)}</span>
-<span class="sd">            Dataframe of edge weights between nodes (observations). If `None` unweighted hop count is used.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">    ----------</span>
-<span class="sd">        corr_arr: `np.ndarray` (n_features, n_features)</span>
-<span class="sd">            Array of correlations between every pair of features sorted by the global ordering of nodes.</span>
-<span class="sd">            Node order is based on weighted distance if provided. Otherwise, based on hop distance if `weights` is `None`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">node_ord_dict</span> <span class="o">=</span> <span class="n">get_global_node_order</span><span class="p">(</span><span class="n">poser</span><span class="p">,</span> <span class="n">graph_nw</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">)</span>
-    <span class="n">node_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">node_ord_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-    <span class="n">obs_ord_labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">obs_labels</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span> <span class="k">for</span> <span class="n">node_id</span> <span class="ow">in</span> <span class="n">node_ids</span><span class="p">]</span>
-    <span class="n">feat_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">obs_ord_labels</span><span class="p">])</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">spearmanr</span><span class="p">(</span><span class="n">feat_arr</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">corr_arr</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">correlation</span>
-
-    <span class="k">return</span> <span class="n">corr_arr</span></div>
-
-
-
-<div class="viewcode-block" id="ordered_features_correlation_branch">
-<a class="viewcode-back" href="../../../reference/generated/netflow.probe.summary.html#netflow.probe.summary.ordered_features_correlation_branch">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">ordered_features_correlation_branch</span><span class="p">(</span><span class="n">poser</span><span class="p">,</span> <span class="n">graph_nw</span><span class="p">,</span> <span class="n">data_df</span><span class="p">,</span> <span class="n">obs_labels</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">min_branch_size</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Compute correlations between pairs of features on each branch.</span>
-
-<span class="sd">    Parameters:</span>
-<span class="sd">    ----------</span>
-<span class="sd">        poser: `netflow.pose.POSER`</span>
-<span class="sd">            The object used to construct the POSE.</span>
-<span class="sd">        graph_nw: `networkx.Graph`</span>
-<span class="sd">            The POSE graph.</span>
-<span class="sd">        data_df: `pandas.DataFrame` (n_features, n_observations)</span>
-<span class="sd">            Feature matrix.</span>
-<span class="sd">        obs_labels: `list` of `str`</span>
-<span class="sd">            List of observation labels corresponding to node IDs.</span>
-<span class="sd">        weights: {`None`, `pandas.DataFrame`, (n, n)}</span>
-<span class="sd">            Dataframe of edge weights between nodes (observations). If `None` unweighted hop count is used.</span>
-<span class="sd">        min_branch_size: {`None`, `int`}</span>
-<span class="sd">            Skip branches with &lt;= ``min_branch_size`` observations.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">    ----------</span>
-<span class="sd">        corr_dict: `dict`</span>
-<span class="sd">            Dictionary of correlations between feature pairs sorted by node order on each branch.</span>
-<span class="sd">            Node order is based on weighted distance if provided. Otherwise, based on hop distance if `weights` is `None`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">branch_ord_dict</span> <span class="o">=</span> <span class="n">get_branch_node_order</span><span class="p">(</span><span class="n">poser</span><span class="p">,</span> <span class="n">graph_nw</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">,</span> <span class="n">min_branch_size</span><span class="o">=</span><span class="n">min_branch_size</span><span class="p">)</span>
-    <span class="n">corr_dict</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">branch_id</span><span class="p">,</span> <span class="n">ord_dict</span> <span class="ow">in</span> <span class="n">branch_ord_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-
-        <span class="n">branch_ord_node_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ord_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-        <span class="n">observation_subset</span> <span class="o">=</span> <span class="p">[</span><span class="n">obs_labels</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span> <span class="k">for</span> <span class="n">node_id</span> <span class="ow">in</span> <span class="n">branch_ord_node_ids</span><span class="p">]</span>
-        <span class="n">feat_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">observation_subset</span><span class="p">])</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">spearmanr</span><span class="p">(</span><span class="n">feat_arr</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">corr_dict</span><span class="p">[</span><span class="n">branch_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">correlation</span>
-
-    <span class="k">return</span> <span class="n">corr_dict</span></div>
-
 
 
 

@@ -59,7 +59,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.dev" />
-    <meta name="docbuild:last-update" content="May 20, 2026"/>
+    <meta name="docbuild:last-update" content="Jun 10, 2026"/>
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -791,6 +791,11 @@ be of the form <cite>List</cite> [<cite>int</cite>], to reference observations b
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#netflow.keepers.keeper.DataView.data" title="Link to this definition">#</a></dt>
 <dd><p>The data set.</p>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="netflow.keepers.keeper.DataView.feature_correlations">
+<span class="sig-name descname"><span class="pre">feature_correlations</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/netflow/keepers/keeper.html#DataView.feature_correlations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#netflow.keepers.keeper.DataView.feature_correlations" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="netflow.keepers.keeper.DataView.feature_index">
@@ -2195,10 +2200,11 @@ geometry of the data matters, not the sampled density.</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>key</strong> (<cite>str</cite>) – The label used to reference the distance matrix stored in <code class="docutils literal notranslate"><span class="pre">keeper.distances</span></code>,
 of size (n_observations, n_observations).</p></li>
-<li><p><strong>root</strong> ({<cite>None</cite>, <cite>int</cite>, ‘density’, ‘density_inv’, ‘ratio’}) – <p>The root. If <cite>None</cite>, ‘density’ is used.</p>
+<li><p><strong>root</strong> ({<cite>None</cite>, <cite>int</cite>, <cite>List[int]</cite>, ‘density’, ‘density_inv’, ‘ratio’}) – <p>The root. If <cite>None</cite>, ‘density’ is used.</p>
 <p>Options:</p>
 <ul>
 <li><p><cite>int</cite> : index of observation</p></li>
+<li><p><cite>List[int]</cite> : list of indices of observations and uses the mean distance to them.</p></li>
 <li><p>’density’ : select observation with minimal distance-density</p></li>
 <li><p>’density_inv’ : select observation with maximal distance-density</p></li>
 <li><p>’ratio’ : select observation which leads to maximal triangular ratio distance</p></li>
@@ -3552,6 +3558,7 @@ saved in <code class="docutils literal notranslate"><span class="pre">keeper.dis
 <li class="toctree-l8 toc-h8 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.keepers.keeper.DataView.__init__"><code class="docutils literal notranslate"><span class="pre">DataView.__init__()</span></code></a></li>
 <li class="toctree-l8 toc-h8 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.keepers.keeper.DataView.__module__"><code class="docutils literal notranslate"><span class="pre">DataView.__module__</span></code></a></li>
 <li class="toctree-l8 toc-h8 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.keepers.keeper.DataView.data"><code class="docutils literal notranslate"><span class="pre">DataView.data</span></code></a></li>
+<li class="toctree-l8 toc-h8 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.keepers.keeper.DataView.feature_correlations"><code class="docutils literal notranslate"><span class="pre">DataView.feature_correlations()</span></code></a></li>
 <li class="toctree-l8 toc-h8 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.keepers.keeper.DataView.feature_index"><code class="docutils literal notranslate"><span class="pre">DataView.feature_index()</span></code></a></li>
 <li class="toctree-l8 toc-h8 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.keepers.keeper.DataView.feature_labels"><code class="docutils literal notranslate"><span class="pre">DataView.feature_labels</span></code></a></li>
 <li class="toctree-l8 toc-h8 nav-item toc-entry"><a class="reference internal nav-link" href="#netflow.keepers.keeper.DataView.label"><code class="docutils literal notranslate"><span class="pre">DataView.label</span></code></a></li>
